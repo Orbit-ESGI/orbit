@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+# Rôle : {{ wireguard_role }}. Ne pas modifier à la main : éditer l'inventaire Ansible.
+[Interface]
+Address = {{ wireguard_adresse }}
+{% if wireguard_role == 'hub' %}
+ListenPort = {{ wireguard_port }}
+{% endif %}
+PostUp = wg set %i private-key {{ wireguard_dossier }}/%i.key
+{% for pair in wireguard_pairs %}
+
+[Peer]
+# {{ pair.nom }}
+PublicKey = {{ pair.cle_publique }}
+AllowedIPs = {{ pair.allowed_ips | join(', ') }}
+{% if pair.endpoint is defined %}
+Endpoint = {{ pair.endpoint }}
+{% endif %}
+{% if wireguard_role != 'hub' %}
+# Derrière un NAT : un paquet toutes les 25 s garde le tunnel ouvert.
+PersistentKeepalive = 25
+{% endif %}
+{% endfor %}

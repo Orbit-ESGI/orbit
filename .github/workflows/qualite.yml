@@ -44,6 +44,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       # hashFiles() n'est pas utilisable dans un "if" de job : le test se fait au niveau des étapes.
+      - name: Installer les collections Ansible
+        if: ${{ hashFiles('infra/ansible/playbooks/*.yml') != '' }}
+        run: pipx run --spec ansible-core ansible-galaxy collection install -r requirements.yml
+        working-directory: infra/ansible
       - name: Lint Ansible (s'il y a des playbooks)
         if: ${{ hashFiles('infra/ansible/playbooks/*.yml') != '' }}
         run: pipx run ansible-lint

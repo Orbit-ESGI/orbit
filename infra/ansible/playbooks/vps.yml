@@ -1,0 +1,9 @@
+# Site C — VPS OVH : socle commun, durcissement, hub WireGuard.
+# Usage : make vps (ou make vps-check pour un essai à blanc).
+- name: Configurer le VPS en hub WireGuard
+  hosts: site_c_vps
+  become: true
+  roles:
+    - role: commun
+    - role: durcissement
+    - role: wireguard

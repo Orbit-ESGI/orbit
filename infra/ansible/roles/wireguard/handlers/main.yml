@@ -1,0 +1,7 @@
+# Redémarrage (et non rechargement) : la clé privée est appliquée par PostUp,
+# que "wg syncconf" ne rejoue pas. Le tunnel est coupé quelques secondes.
+- name: Redémarrer WireGuard
+  ansible.builtin.service:
+    name: "wg-quick@{{ wireguard_interface }}"
+    state: restarted
+  ignore_errors: "{{ ansible_check_mode }}" # en --check, le service n'existe pas encore

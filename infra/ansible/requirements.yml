@@ -1,0 +1,7 @@
+# Collections Ansible utilisées par les rôles ORBIT.
+# Installation : ansible-galaxy collection install -r requirements.yml
+collections:
+  - name: community.general # ufw, timezone
+    version: ">=10.0.0"
+  - name: ansible.posix # sysctl
+    version: ">=1.6.0"

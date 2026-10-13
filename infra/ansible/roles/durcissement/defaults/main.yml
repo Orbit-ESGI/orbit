@@ -1,0 +1,6 @@
+durcissement_ssh_port: 22
+durcissement_ssh_utilisateurs: ["{{ ansible_user }}"]
+durcissement_ssh_max_essais: 3
+durcissement_fail2ban_bantime: 1h
+durcissement_fail2ban_findtime: 10m
+durcissement_fail2ban_maxretry: 5

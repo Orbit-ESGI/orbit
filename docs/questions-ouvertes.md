@@ -19,7 +19,10 @@
 - [x] 2026-10-13 : services jugés inutiles par Victor → arrêtés et désactivés (atelia, atelia-broker,
   domiscan-render, caddy, cloudflared, timers atelia-sauvegarde et cloudflared-update, conteneur atelia-db).
   Rien n'a été supprimé (fichiers, volume PostgreSQL, unités systemd conservés). Seul SSH (22) reste exposé.
-- [ ] Rôle ORBIT retenu : léger (hub WireGuard, témoin, entrée via Caddy) — pas de Kubernetes pour ne pas casser l'existant
+- [x] Rôle ORBIT retenu : léger (hub WireGuard, témoin, entrée publique), pas de Kubernetes
+- [x] 2026-10-13 : hub WireGuard en place via Ansible (`make vps`), idempotent (2ᵉ passage : 0 changement)
+- [ ] Tunnel direct A↔B de secours (port UDP ouvrable sur la box du site B ?) — voir ADR 0005
+- [ ] Plage du LAN des VM sur le Proxmox de l'école (`10.10.0.0/16` supposé)
 
 ## Équipe
 - [x] 3 membres

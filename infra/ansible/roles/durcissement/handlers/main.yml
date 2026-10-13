@@ -1,0 +1,9 @@
+- name: Recharger sshd
+  ansible.builtin.service:
+    name: ssh
+    state: reloaded
+
+- name: Recharger fail2ban
+  ansible.builtin.service:
+    name: fail2ban
+    state: reloaded

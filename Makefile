@@ -15,7 +15,13 @@ lint: ## Lance toutes les vérifications locales
 ping: ## Vérifie qu'Ansible joint toutes les machines
 	cd $(ANSIBLE_DIR) && ansible all -m ping
 
-vps: ## Configure le VPS (site C)
-	cd $(ANSIBLE_DIR) && ansible-playbook playbooks/vps.yml
+collections: ## Installe les collections Ansible requises
+	cd $(ANSIBLE_DIR) && ansible-galaxy collection install -r requirements.yml
 
-.PHONY: help outils lint ping vps
+vps-check: ## Essai à blanc sur le VPS : affiche ce qui changerait, sans rien modifier
+	cd $(ANSIBLE_DIR) && ansible-playbook playbooks/vps.yml --check --diff
+
+vps: ## Configure le VPS (site C)
+	cd $(ANSIBLE_DIR) && ansible-playbook playbooks/vps.yml --diff
+
+.PHONY: help outils lint ping collections vps-check vps
