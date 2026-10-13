@@ -12,7 +12,7 @@
 | 7 — Résilience | PRA/PCA prouvé par la mesure | CloudNativePG, Velero, MinIO, Chaos Mesh |
 
 ## Services gratuits utilisés
-- GitHub avec le Student Developer Pack (dépôt privé, Actions, GHCR, Dependabot)
+- GitHub avec le Student Developer Pack (dépôt public : Actions illimitées, protection de branche, secret scanning, CodeQL, GHCR, Dependabot)
 - Nom de domaine : `vpn-ctf.pro` (déjà possédé, géré sur Cloudflare) → sous-domaine dédié `*.orbit.vpn-ctf.pro`
 - DNS + TLS : Cloudflare DNS (gratuit), certificats Let's Encrypt via cert-manager en challenge **DNS-01**
   (fonctionne sans port entrant, permet un wildcard `*.orbit.vpn-ctf.pro`), enregistrements gérés par external-dns
