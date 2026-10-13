@@ -26,14 +26,14 @@
     sysctl_file: /etc/sysctl.d/90-orbit-durcissement.conf
     reload: true
   loop:
-    - { cle: net.ipv4.conf.all.accept_redirects, valeur: "0" }
-    - { cle: net.ipv4.conf.all.send_redirects, valeur: "0" }
-    - { cle: net.ipv4.conf.all.accept_source_route, valeur: "0" }
-    - { cle: net.ipv4.conf.all.log_martians, valeur: "1" }
-    - { cle: net.ipv4.tcp_syncookies, valeur: "1" }
-    - { cle: net.ipv6.conf.all.accept_redirects, valeur: "0" }
-    - { cle: kernel.dmesg_restrict, valeur: "1" }
-    - { cle: kernel.kptr_restrict, valeur: "2" }
+    - {cle: net.ipv4.conf.all.accept_redirects, valeur: "0"}
+    - {cle: net.ipv4.conf.all.send_redirects, valeur: "0"}
+    - {cle: net.ipv4.conf.all.accept_source_route, valeur: "0"}
+    - {cle: net.ipv4.conf.all.log_martians, valeur: "1"}
+    - {cle: net.ipv4.tcp_syncookies, valeur: "1"}
+    - {cle: net.ipv6.conf.all.accept_redirects, valeur: "0"}
+    - {cle: kernel.dmesg_restrict, valeur: "1"}
+    - {cle: kernel.kptr_restrict, valeur: "2"}
   loop_control:
     label: "{{ item.cle }}"
 
