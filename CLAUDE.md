@@ -30,7 +30,10 @@ Tout ce que Claude produit doit viser la meilleure note possible, avec un niveau
 ## État du VPS (2026-10-13)
 - Ubuntu 26.04 LTS, noyau 7.0, KVM, 4 vCPU, 7,6 Go RAM, 64 Go disque libre.
 - SSH par clé uniquement (PasswordAuthentication no, PermitRootLogin no), fail2ban actif.
-- ufw actif : 22, 80, 443 (TCP, v4 + v6). WireGuard (UDP 51820) à ouvrir le moment venu.
+- Géré par Ansible (`make vps`, playbook `infra/ansible/playbooks/vps.yml`) : ne plus rien modifier à la main.
+- ufw actif : 22, 80, 443 (TCP) + 51820 (UDP), v4 + v6 ; relais autorisé sur wg0.
+- WireGuard hub `wg0` = 10.200.0.1/24, clé publique `E6lCLZX6AxoWZZF9pfh4so44nQGfqWy5daz8MSm9Qn8=`, aucun pair encore.
+- SSH durci (AllowUsers ubuntu, MaxAuthTries 3, pas de X11/agent forwarding), fail2ban progressif, fuseau Europe/Paris.
 - Anciens services atelia / domiscan / caddy / cloudflared arrêtés et désactivés, non supprimés.
 - Docker installé : attention, les ports publiés par Docker contournent ufw.
 - Rôle ORBIT : hub WireGuard, témoin, point d'entrée public. Pas de Kubernetes dessus.

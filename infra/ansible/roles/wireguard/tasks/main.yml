@@ -1,0 +1,78 @@
+- name: Installer WireGuard
+  ansible.builtin.apt:
+    name: wireguard-tools
+    state: present
+
+- name: Créer le dossier de configuration (root uniquement)
+  ansible.builtin.file:
+    path: "{{ wireguard_dossier }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+# La clé privée est générée SUR la machine et n'en sort jamais :
+# ni Git, ni Ansible, ni les journaux ne la voient. wg-quick la charge via PostUp.
+- name: Générer la clé privée (une seule fois)
+  ansible.builtin.shell:
+    cmd: umask 077 && wg genkey > {{ wireguard_dossier }}/{{ wireguard_interface }}.key
+    creates: "{{ wireguard_dossier }}/{{ wireguard_interface }}.key"
+
+- name: Calculer la clé publique
+  ansible.builtin.shell:
+    cmd: wg pubkey < {{ wireguard_dossier }}/{{ wireguard_interface }}.key > {{ wireguard_dossier }}/{{ wireguard_interface }}.pub
+    creates: "{{ wireguard_dossier }}/{{ wireguard_interface }}.pub"
+
+- name: Lire la clé publique
+  ansible.builtin.slurp:
+    src: "{{ wireguard_dossier }}/{{ wireguard_interface }}.pub"
+  register: wireguard_cle_publique
+  # Lors du tout premier essai à blanc (--check), la clé n'existe pas encore.
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Afficher la clé publique (à donner aux pairs)
+  ansible.builtin.debug:
+    msg: "Clé publique de {{ inventory_hostname }} : {{ wireguard_cle_publique.content | b64decode | trim }}"
+  when: wireguard_cle_publique.content is defined
+
+- name: Activer le routage IPv4 (le hub relaie le trafic entre les sites)
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_file: /etc/sysctl.d/90-orbit-wireguard.conf
+    reload: true
+  when: wireguard_role == 'hub'
+
+- name: Écrire la configuration de l'interface
+  ansible.builtin.template:
+    src: wg.conf.j2
+    dest: "{{ wireguard_dossier }}/{{ wireguard_interface }}.conf"
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Redémarrer WireGuard
+
+- name: Ouvrir le port WireGuard (UDP)
+  community.general.ufw:
+    rule: allow
+    port: "{{ wireguard_port | string }}"
+    proto: udp
+    comment: wireguard
+  when: wireguard_role == 'hub'
+
+- name: Autoriser le relais entre pairs à travers le hub
+  community.general.ufw:
+    rule: allow
+    route: true
+    interface_in: "{{ wireguard_interface }}"
+    interface_out: "{{ wireguard_interface }}"
+    comment: wireguard-relais
+  when: wireguard_role == 'hub'
+
+- name: Démarrer l'interface au boot
+  ansible.builtin.service:
+    name: "wg-quick@{{ wireguard_interface }}"
+    state: started
+    enabled: true
+  # En --check, le paquet n'est pas réellement installé : le service n'existe pas encore.
+  ignore_errors: "{{ ansible_check_mode }}"

@@ -1,0 +1,61 @@
+# SSH : sshd garde la PREMIÈRE valeur lue, d'où le préfixe "00-" (prioritaire sur les autres fichiers).
+# La configuration est validée par "sshd -t" avant d'être écrite : impossible de se couper l'accès.
+- name: Durcir la configuration SSH
+  ansible.builtin.template:
+    src: 00-orbit-sshd.conf.j2
+    dest: /etc/ssh/sshd_config.d/00-orbit.conf
+    owner: root
+    group: root
+    mode: "0644"
+    validate: /usr/sbin/sshd -t -f %s
+  notify: Recharger sshd
+
+- name: Configurer fail2ban (bannissement progressif)
+  ansible.builtin.template:
+    src: orbit-jail.conf.j2
+    dest: /etc/fail2ban/jail.d/orbit.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Recharger fail2ban
+
+- name: Durcir le noyau (sysctl réseau)
+  ansible.posix.sysctl:
+    name: "{{ item.cle }}"
+    value: "{{ item.valeur }}"
+    sysctl_file: /etc/sysctl.d/90-orbit-durcissement.conf
+    reload: true
+  loop:
+    - { cle: net.ipv4.conf.all.accept_redirects, valeur: "0" }
+    - { cle: net.ipv4.conf.all.send_redirects, valeur: "0" }
+    - { cle: net.ipv4.conf.all.accept_source_route, valeur: "0" }
+    - { cle: net.ipv4.conf.all.log_martians, valeur: "1" }
+    - { cle: net.ipv4.tcp_syncookies, valeur: "1" }
+    - { cle: net.ipv6.conf.all.accept_redirects, valeur: "0" }
+    - { cle: kernel.dmesg_restrict, valeur: "1" }
+    - { cle: kernel.kptr_restrict, valeur: "2" }
+  loop_control:
+    label: "{{ item.cle }}"
+
+# Pare-feu : tout refuser en entrée, puis ouvertures explicites.
+# SSH est autorisé AVANT l'activation d'ufw pour ne jamais perdre la main.
+- name: Autoriser SSH
+  community.general.ufw:
+    rule: allow
+    port: "{{ durcissement_ssh_port | string }}"
+    proto: tcp
+    comment: ssh
+
+- name: Autoriser les ports TCP publics
+  community.general.ufw:
+    rule: allow
+    port: "{{ item | string }}"
+    proto: tcp
+    comment: orbit-public
+  loop: "{{ pare_feu_tcp_publics | default([]) }}"
+
+- name: Activer ufw (entrée refusée par défaut)
+  community.general.ufw:
+    state: enabled
+    default: deny
+    direction: incoming

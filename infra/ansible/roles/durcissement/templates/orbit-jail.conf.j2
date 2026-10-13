@@ -1,0 +1,14 @@
+# {{ ansible_managed }}
+[DEFAULT]
+bantime = {{ durcissement_fail2ban_bantime }}
+findtime = {{ durcissement_fail2ban_findtime }}
+maxretry = {{ durcissement_fail2ban_maxretry }}
+# Récidive : la durée du bannissement augmente à chaque fois (plafond : 1 semaine).
+bantime.increment = true
+bantime.maxtime = 1w
+# Ne jamais bannir le réseau WireGuard interne.
+ignoreip = 127.0.0.1/8 ::1 {{ wireguard_reseau | default('') }}
+
+[sshd]
+enabled = true
+port = {{ durcissement_ssh_port }}

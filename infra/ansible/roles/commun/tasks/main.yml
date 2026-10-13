@@ -1,0 +1,25 @@
+- name: Installer les paquets de base
+  ansible.builtin.apt:
+    name: "{{ commun_paquets }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Régler le fuseau horaire
+  community.general.timezone:
+    name: "{{ orbit_fuseau_horaire }}"
+
+- name: Activer les mises à jour de sécurité automatiques
+  ansible.builtin.template:
+    src: 52-orbit-unattended-upgrades.j2
+    dest: /etc/apt/apt.conf.d/52-orbit-unattended-upgrades
+    owner: root
+    group: root
+    mode: "0644"
+
+# Horloge synchronisée : indispensable pour TLS, les jetons OIDC et la corrélation des journaux.
+- name: Démarrer chrony
+  ansible.builtin.service:
+    name: chrony
+    state: started
+    enabled: true

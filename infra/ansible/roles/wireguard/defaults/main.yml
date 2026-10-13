@@ -1,0 +1,6 @@
+wireguard_interface: wg0
+wireguard_port: 51820
+wireguard_role: hub # hub (VPS) ou pair (passerelles des sites A et B, postes d'admin)
+wireguard_adresse: 10.200.0.1/24
+wireguard_pairs: []
+wireguard_dossier: /etc/wireguard

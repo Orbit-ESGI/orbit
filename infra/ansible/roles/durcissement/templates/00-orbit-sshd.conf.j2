@@ -1,0 +1,14 @@
+# {{ ansible_managed }}
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin no
+PubkeyAuthentication yes
+AuthenticationMethods publickey
+AllowUsers {{ durcissement_ssh_utilisateurs | join(' ') }}
+MaxAuthTries {{ durcissement_ssh_max_essais }}
+LoginGraceTime 30
+X11Forwarding no
+AllowAgentForwarding no
+PermitTunnel no
+ClientAliveInterval 300
+ClientAliveCountMax 2

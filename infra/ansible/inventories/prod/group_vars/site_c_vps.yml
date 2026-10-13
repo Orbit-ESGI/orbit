@@ -1,0 +1,13 @@
+# Site C : le VPS est le hub du réseau WireGuard (voir docs/adr/0005-reseau-overlay-wireguard.md).
+wireguard_role: hub
+wireguard_adresse: 10.200.0.1/24
+
+# Pairs autorisés à se connecter au hub. Seules les CLÉS PUBLIQUES vont dans Git.
+# allowed_ips : l'IP du pair dans le tunnel + les réseaux qu'il annonce (LAN du site).
+wireguard_pairs: []
+#  - nom: site-a-passerelle
+#    cle_publique: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx="
+#    allowed_ips: [10.200.0.10/32, 10.10.0.0/16]
+
+# Ports TCP publics ouverts dans ufw (en plus de SSH et de WireGuard) : entrée HTTP(S) à venir.
+pare_feu_tcp_publics: [80, 443]

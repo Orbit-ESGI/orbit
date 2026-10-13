@@ -1,0 +1,8 @@
+commun_paquets:
+  - chrony
+  - curl
+  - htop
+  - jq
+  - unattended-upgrades
+# Les redémarrages restent manuels : le VPS est le hub, on évite les coupures surprises.
+commun_reboot_auto: false

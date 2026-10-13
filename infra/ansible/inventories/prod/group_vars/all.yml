@@ -3,3 +3,6 @@ orbit_domaine: orbit.vpn-ctf.pro
 orbit_fuseau_horaire: Europe/Paris
 # Clé SSH utilisée par Ansible (chemin sur le poste de contrôle WSL2).
 ansible_ssh_private_key_file: ~/.ssh/atelia_ovh
+
+# Réseau overlay WireGuard commun aux 3 sites (plan d'adressage : docs/adr/0005-reseau-overlay-wireguard.md).
+wireguard_reseau: 10.200.0.0/24
