@@ -13,14 +13,19 @@ Les postes sont sous Windows ; Ansible ne s'exécute pas nativement sous Windows
 2. **Monorepo** : tout au même endroit, une seule CI, une vision globale pour le jury.
 
 ## Décision
-- **Monorepo** sur gitlab.com, organisé par couche (`infra/`, `kubernetes/`, `tests/`, `docs/`).
+- **Monorepo** sur **GitHub** (organisation privée, offre étudiante), organisé par couche (`infra/`, `kubernetes/`, `tests/`, `docs/`).
 - **OpenTofu** plutôt que Terraform : open source (licence MPL), compatible, sans la licence BSL de HashiCorp.
 - **Poste de travail : WSL2 (Ubuntu) + mise** pour installer les mêmes versions d'outils chez les 3 membres (`.mise.toml`).
 - **Garde-fous dès le premier commit** : pre-commit (gitleaks, yamllint, tofu fmt) en local, et les mêmes contrôles en CI.
+- **GitHub plutôt que GitLab** : déjà disponible via le Student Developer Pack (GitHub Pro), écosystème
+  GitHub Actions plus riche, signature Cosign *keyless* via l'OIDC GitHub, générateur SLSA niveau 3
+  (`slsa-github-generator`), Dependabot natif, et visibilité du projet pour les recrutements.
+  Limite assumée : GitHub est un acteur américain (comme gitlab.com) ; seule une forge auto-hébergée
+  serait souveraine, au prix d'une forte consommation de ressources.
 - Fins de ligne forcées en LF (`.gitattributes`) pour éviter les scripts cassés par Windows.
 
 ## Conséquences
 - + Un seul `git clone` pour tout comprendre et tout reconstruire.
-- + Les fuites de secrets sont bloquées avant même d'arriver sur GitLab.
+- + Les fuites de secrets sont bloquées avant même d'arriver sur GitHub.
 - − Chaque membre doit installer WSL2 (une fois).
 - − Dans un monorepo, il faudra des règles CI (`rules: changes`) pour ne lancer que les jobs utiles.

@@ -17,7 +17,7 @@ et qui survit à la perte complète d'un site sans intervention humaine.
 |---|---|
 | **Réseau & sécurité réseau** | WireGuard, Cilium + ClusterMesh, Network Policies L7, Hubble, Tetragon/Falco, DNS Cloudflare |
 | **Infra & résilience** | Proxmox, OpenTofu, Ansible, clusters K8s, CloudNativePG, Velero/MinIO, PRA, Chaos Mesh, mesures RTO/RPO |
-| **DevSecOps & plateforme** | GitLab CI, Trivy/Syft/Cosign, Harbor, Kyverno, ArgoCD, Vault, Keycloak, observabilité/SLO |
+| **DevSecOps & plateforme** | GitHub Actions, Trivy/Syft/Cosign, Harbor, Kyverno, ArgoCD, Vault, Keycloak, observabilité/SLO |
 
 Chaque membre doit pouvoir expliquer l'ensemble du projet en soutenance.
 
@@ -32,7 +32,7 @@ orbit/
 │   ├── platform/       Cilium, cert-manager, Kyverno, Vault, monitoring, CloudNativePG...
 │   ├── apps/           application de démo
 │   └── clusters/       spécificités site-a / site-b
-├── ci/                 modèles de jobs GitLab CI (supply chain)
+├── .github/            workflows GitHub Actions (qualité, puis supply chain) + Dependabot
 ├── tests/              chaos engineering + mesures RTO/RPO/SLO
 ├── scripts/            utilitaires
 └── docs/               architecture, ADR, runbooks, schémas, soutenance

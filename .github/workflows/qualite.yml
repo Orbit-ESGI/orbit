@@ -1,0 +1,48 @@
+# Pipeline ORBIT — étape 1 : qualité et sécurité du dépôt.
+# Les jobs build / scan / SBOM / signature / déploiement viendront avec les couches 3 et 4.
+name: qualite
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Détection de secrets
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest \
+            detect --source /repo --redact --verbose
+
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pipx run yamllint -c .yamllint.yml .
+
+  tofu-fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
+      - run: tofu fmt -check -recursive infra/terraform
+
+  ansible-lint:
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('infra/ansible/playbooks/*.yml') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pipx run ansible-lint
+        working-directory: infra/ansible

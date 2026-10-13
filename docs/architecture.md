@@ -18,8 +18,8 @@ et évite le split-brain (deux bases qui se croient primaires en même temps).
 - Le trafic public arrive sur le VPS puis est routé vers le site actif.
 
 ## Flux de déploiement
-1. `git push` sur gitlab.com
-2. Runner CI auto-hébergé : build → scan Trivy → SBOM → signature Cosign → push Harbor
+1. `git push` sur GitHub
+2. GitHub Actions (runners GitHub ou auto-hébergés) : build → scan Trivy → SBOM → signature Cosign → push Harbor
 3. ArgoCD (ApplicationSets) déploie sur les clusters A et B
 4. Kyverno refuse toute image non signée
 

@@ -1,0 +1,11 @@
+# Mises à jour automatiques des dépendances (proposées en pull request).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: terraform
+    directories: ["/infra/terraform/envs/*", "/infra/terraform/modules/*"]
+    schedule:
+      interval: weekly

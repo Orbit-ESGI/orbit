@@ -14,7 +14,7 @@ et hébergé à domicile, et un VPS OVH est déjà disponible.
 - Site C : VPS OVH (entrée publique, hub WireGuard, témoin de quorum).
 - Remplacements gratuits : domaine existant `vpn-ctf.pro` (Cloudflare) avec le sous-domaine
   `orbit.vpn-ctf.pro`, stockage objet via MinIO
-  auto-hébergé (sauvegardes croisées A↔B), gitlab.com pour le code et la CI.
+  auto-hébergé (sauvegardes croisées A↔B), GitHub (offre étudiante) pour le code et la CI.
 
 ## Conséquences
 - + Coût nul, et trois sites indépendants (meilleur qu'un hybride à deux sites pour le quorum).
