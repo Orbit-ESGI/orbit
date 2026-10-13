@@ -41,8 +41,10 @@ jobs:
 
   ansible-lint:
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('infra/ansible/playbooks/*.yml') != '' }}
     steps:
       - uses: actions/checkout@v4
-      - run: pipx run ansible-lint
+      # hashFiles() n'est pas utilisable dans un "if" de job : le test se fait au niveau des étapes.
+      - name: Lint Ansible (s'il y a des playbooks)
+        if: ${{ hashFiles('infra/ansible/playbooks/*.yml') != '' }}
+        run: pipx run ansible-lint
         working-directory: infra/ansible
