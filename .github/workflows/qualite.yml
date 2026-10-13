@@ -18,7 +18,7 @@ jobs:
   gitleaks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Détection de secrets
@@ -29,20 +29,20 @@ jobs:
   yamllint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: pipx run yamllint -c .yamllint.yml .
 
   tofu-fmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: opentofu/setup-opentofu@v1
       - run: tofu fmt -check -recursive infra/terraform
 
   ansible-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       # hashFiles() n'est pas utilisable dans un "if" de job : le test se fait au niveau des étapes.
       - name: Lint Ansible (s'il y a des playbooks)
         if: ${{ hashFiles('infra/ansible/playbooks/*.yml') != '' }}
