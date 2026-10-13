@@ -1,0 +1,15 @@
+# Versions des outils du poste de travail, identiques pour les 3 membres.
+# Installation : mise install   (voir docs/setup-poste.md)
+# TODO : remplacer "latest" par les versions exactes après la première installation (mise ls).
+[tools]
+opentofu = "latest"
+kubectl = "latest"
+helm = "latest"
+k9s = "latest"
+cilium-cli = "latest"
+argocd = "latest"
+sops = "latest"
+age = "latest"
+"pipx:ansible-core" = "latest"
+"pipx:ansible-lint" = "latest"
+"pipx:pre-commit" = "latest"

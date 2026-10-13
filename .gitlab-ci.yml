@@ -1,0 +1,40 @@
+# Pipeline ORBIT — étape 1 : qualité et sécurité du dépôt.
+# Les étapes build / scan / signature / déploiement viendront avec les couches 3 et 4.
+stages:
+  - lint
+  - securite
+
+default:
+  interruptible: true
+
+gitleaks:
+  stage: securite
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - gitleaks detect --source . --redact --verbose
+
+yamllint:
+  stage: lint
+  image: pipelinecomponents/yamllint:latest
+  script:
+    - yamllint -c .yamllint.yml .
+
+tofu-fmt:
+  stage: lint
+  image:
+    name: ghcr.io/opentofu/opentofu:latest
+    entrypoint: [""]
+  script:
+    - tofu fmt -check -recursive infra/terraform
+  rules:
+    - exists: ["infra/terraform/**/*.tf"]
+
+ansible-lint:
+  stage: lint
+  image: pipelinecomponents/ansible-lint:latest
+  script:
+    - cd infra/ansible && ansible-lint
+  rules:
+    - exists: ["infra/ansible/playbooks/*.yml"]

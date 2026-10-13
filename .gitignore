@@ -1,0 +1,39 @@
+# --- Terraform / OpenTofu ---
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfplan
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl.bak
+
+# --- Secrets : ne JAMAIS commiter en clair ---
+*.pem
+*.key
+*.p12
+*.age
+!*.pub.age
+*.kubeconfig
+kubeconfig*
+.env
+.env.*
+!.env.example
+secrets/
+*.dec.yaml
+*.dec.yml
+wg*.conf
+
+# --- Ansible ---
+*.retry
+.ansible/
+
+# --- Graphify (le graphe est régénérable) ---
+graphify-out/cache/
+
+# --- Divers ---
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
