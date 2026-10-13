@@ -13,7 +13,7 @@ Les postes sont sous Windows ; Ansible ne s'exécute pas nativement sous Windows
 2. **Monorepo** : tout au même endroit, une seule CI, une vision globale pour le jury.
 
 ## Décision
-- **Monorepo** sur **GitHub** (organisation privée, offre étudiante), organisé par couche (`infra/`, `kubernetes/`, `tests/`, `docs/`).
+- **Monorepo** sur **GitHub** (organisation `Orbit-ESGI`, dépôt **public** — voir ADR 0004), organisé par couche (`infra/`, `kubernetes/`, `tests/`, `docs/`).
 - **OpenTofu** plutôt que Terraform : open source (licence MPL), compatible, sans la licence BSL de HashiCorp.
 - **Poste de travail : WSL2 (Ubuntu) + mise** pour installer les mêmes versions d'outils chez les 3 membres (`.mise.toml`).
 - **Garde-fous dès le premier commit** : pre-commit (gitleaks, yamllint, tofu fmt) en local, et les mêmes contrôles en CI.
